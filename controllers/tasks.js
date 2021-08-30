@@ -51,28 +51,38 @@ const deleteTask = (req, res, next) => {
 const editTask = (req, res, next) => {
   const id = req.user._id;
   const { taskId } = req.params;
+
   Task.findByIdAndUpdate(
     taskId,
     {
-      task: req.body.task,
-      important: req.body.important
+    task: req.body.task,
+    important: req.body.important
     },
     {
-      new: true,
-      runValidators: true,
-    },
-  )
-  .then((task) => {
-    if (task.owner !== id) {
-      throw new Forbidden('У вас нет прав редактировать эту запись')
-    }
+    new: true,
+    runValidators: true,
+    })
+    .then((task) => {
+      if(task.owner.toString() !== id) {
+        throw new Forbidden('У вас нет прав редактировать эту запись');
+      }
 
-    if(!task) {
-      throw new BadRequest('Ошибка запроса');
-    }
-    res.status(200).send(task)
-  })
-  .catch(err => next(err));
+      if(!task) {
+        throw new BadRequest('Ошибка запроса');
+      }
+
+      const newTask = {
+        _id: task._id,
+        task: task.task,
+        important: task.important,
+        owner: task.owner,
+        isComplete: task.isComplete,
+        createdAt: task.createdAt,
+      }
+
+      res.status(200).send(newTask)
+    })
+    .catch(err => next(err));
 };
 
 module.exports = {
