@@ -7,10 +7,6 @@ const taskSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 400,
   },
-  taskId: {
-    type: String,
-    required: true,
-  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
