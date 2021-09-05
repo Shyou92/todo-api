@@ -19,6 +19,7 @@ const taskSchema = new mongoose.Schema({
   },
   isComplete: {
     type: Boolean,
+    default: false,
     required: false,
   },
   createdAt: { type: Date, default: Date.now },
